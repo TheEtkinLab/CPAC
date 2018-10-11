@@ -1,5 +1,5 @@
 # CPAC Pipeline Configuration YAML file
-# Version 1.0.3
+# Version 1.1.0
 #
 # http://fcp-indi.github.io for more info.
 #
@@ -73,6 +73,18 @@ awsOutputBucketCredentials :
 
 # Enable server-side 256-AES encryption on data to the S3 bucket
 s3Encryption :  [0]
+
+
+# Include extra versions and intermediate steps of functional preprocessing in the output directory.
+write_func_outputs :  [0]
+
+
+# Include extra outputs in the output directory that may be of interest when more information is needed.
+write_debugging_outputs :  [0]
+
+
+# Generate quality control pages containing preprocessing and derivative outputs.
+generateQualityControlImages :  [1]
 
 
 # Create a user-friendly, well organized version of the output directory.
@@ -337,6 +349,7 @@ fdCalc :  ['Jenkinson']
 spikeThreshold : [0.2]
 
 
+<<<<<<< HEAD
 # (Motion Spike De-Noising only) Number of volumes to de-spike or scrub preceding a volume with excessive FD.
 numRemovePrecedingFrames :  1
 
@@ -352,6 +365,12 @@ runMedianAngleCorrection :  [0]
 # Target angle used during Median Angle Correction.
 targetAngleDeg : [90]
 
+=======
+# Motion Spike De-Noising. Remove or regress out volumes exhibiting
+# excessive motion.
+# Options: ['Off'], ['De-Spiking'], or ['Scrubbing']
+runMotionSpike :  ['Off']
+>>>>>>> upstream/master
 
 # Apply a temporal band-pass filter to functional data.
 runFrequencyFiltering :  [1]
@@ -359,6 +378,23 @@ runFrequencyFiltering :  [1]
 
 # Define one or more band-pass filters by clicking the + button.
 nuisanceBandpassFreq : [[0.01, 0.1]]
+
+<<<<<<< HEAD
+=======
+# (Motion Spike De-Noising only) Specify the maximum acceptable Framewise
+# Displacement (FD) in millimeters. Any volume exhibiting FD greater than 
+# the value  will be regressed out or scrubbed.
+# Options: float value like [0.2] or [1.5]
+spikeThreshold : [0.5]
+>>>>>>> upstream/master
+
+
+# Number of volumes to remove preceeding a volume with excessive FD.
+numRemovePrecedingFrames :  1
+
+
+# Number of volumes to remove subsequent to a volume with excessive FD.
+numRemoveSubsequentFrames :  2
 
 
 # Extract the average time series of one or more ROIs/seeds. Must be enabled if you wish to run Seed-based Correlation Analysis.
@@ -508,14 +544,28 @@ lfcdCorrelationThreshold :  0.6
 memoryAllocatedForDegreeCentrality :  1.0
 
 
+# Smooth the derivative outputs.
+# On - Run smoothing and output only the smoothed outputs.
+# On/Off - Run smoothing and output both the smoothed and non-smoothed outputs.
+# Off - Don't run smoothing.
+run_smoothing :  [1]
+
+
 # Full Width at Half Maximum of the Gaussian kernel used during spatial smoothing.
 # Can be a single value or multiple values separated by commas.
 # Note that spatial smoothing is run as the last step in the individual-level analysis pipeline, such that all derivatives are output both smoothed and unsmoothed.
 fwhm : [6]
 
 
-# Decides format of outputs. Off will produce non-z-scored outputs, On will produce z-scores of outputs and non-z-scored outputs.
-runZScoring :  [0]
+# Choose whether to smooth outputs before or after z-scoring.
+smoothing_order :  ['Before']
+
+
+# z-score standardize the derivatives. This is required for group-level analysis.
+# On - Run z-scoring and output only the z-scored outputs.
+# On/Off - Run z-scoring and output both the z-scored and raw score versions of the outputs.
+# Off - Don't run z-scoring.
+runZScoring :  [1]
 
 
 # This number depends on computing resources.
@@ -525,4 +575,43 @@ numGPAModelsAtOnce :  1
 # Use the + to add FSL model configuration to be run.
 modelConfigs :  []
 
+<<<<<<< HEAD
+=======
+disable_log : False
+
+# Perform fieldmap correction using FSL FUGUE, with a single phase difference image, a subtraction of the two phase images from each echo.
+# Default scanner for this method is SIEMENS.
+runEPI_DistCorr :  [0]
+
+
+# Since the quality of the distortion heavily relies on the skull-stripping,
+# step, we provide a choice of method (AFNI 3dSkullStrip or FSL BET).
+# Options: ["BET", "3dSkullStrip"]
+fmap_distcorr_skullstrip: ["BET"]
+
+
+# Set the threshold value for the skull-stripping of the magnitude file.
+# Depending on the data, a tighter extraction may be necessary in order to
+# prevent noisy voxels from interfering with preparing the field map.
+# The default value is 0.5.
+fmap_distcorr_frac: [0.5]
+
+
+# Set the Delta-TE value, used for preparing the field map, the time delay between the first and second echo images.
+fmap_distcorr_deltaTE : 2.46
+
+
+# Set the Dwell time for FSL FUGUE. This is the time between scans.
+# The default value is commonly 0.00231s.
+fmap_distcorr_dwell_time : [0.0005]
+
+
+# Set the asymmetric ratio input value for FSL FUGUE.
+fmap_distcorr_dwell_asym_ratio : [0.93902439]
+
+
+# Set the phase-encoding direction. The options are: x, y, z, -x, -y, -z.
+fmap_distcorr_pedir: -y
+
+>>>>>>> upstream/master
 
