@@ -100,6 +100,9 @@ RUN conda install -y \
       matplotlib \
       networkx==1.11 \
       nose \
+      blas \
+      numpy-base \
+      libopenblas \
       numpy==1.11 \
       pandas \
       pip \
