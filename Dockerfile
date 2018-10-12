@@ -58,6 +58,8 @@ RUN apt-get update && \
     apt-get autoremove -y
 
 # install AFNI
+RUN  wget https://github.com/TheEtkinLab/CPAC/blob/d695dd1fd05fb944c808e1e78e60da3404ccbe75/afni_minimal.tar.gz?raw=true
+
 COPY afni_minimal.tar.gz /tmp/
 
 RUN tar xfz /tmp/afni_minimal.tar.gz && \
