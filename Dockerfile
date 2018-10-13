@@ -58,18 +58,26 @@ RUN apt-get update && \
     apt-get autoremove -y
 
 # install AFNI
-RUN  wget https://github.com/TheEtkinLab/CPAC/blob/d695dd1fd05fb944c808e1e78e60da3404ccbe75/afni_minimal.tar.gz?raw=true -O afni_minimal.tar.gz
+RUN  wget https://github.com/TheEtkinLab/CPAC/blob/d695dd1fd05fb944c808e1e78e60da3404ccbe75/afni_minimal.tar.gz?raw=true -O afni_minimal.tar.gz && \
+     tar xfz afni_minimal.tar.gz && \
+     mv afni_minimal /opt/afni && \
+     rm afni_minimal.tar.gz && \
+     export PATH=/opt/afni:$PATH && \
+     export DYLD_FALLBACK_LIBRARY_PATH=/opt/afni && \
+     echo '# Path to AFNI' >> ~/cpac_env.sh && \
+     echo 'export PATH=/opt/afni:$PATH' >> ~/cpac_env.sh && \
+     echo 'export DYLD_FALLBACK_LIBRARY_PATH=/opt/afni' >> ~/cpac_env.sh
 
-COPY afni_minimal.tar.gz /tmp/
+#COPY afni_minimal.tar.gz /tmp/
 
-RUN tar xfz /tmp/afni_minimal.tar.gz && \
-    mv afni_minimal /opt/afni && \
-    rm /tmp/afni_minimal.tar.gz && \
-    export PATH=/opt/afni:$PATH && \
-    export DYLD_FALLBACK_LIBRARY_PATH=/opt/afni && \
-    echo '# Path to AFNI' >> ~/cpac_env.sh && \
-    echo 'export PATH=/opt/afni:$PATH' >> ~/cpac_env.sh && \
-    echo 'export DYLD_FALLBACK_LIBRARY_PATH=/opt/afni' >> ~/cpac_env.sh
+# RUN tar xfz /tmp/afni_minimal.tar.gz && \
+#     mv afni_minimal /opt/afni && \
+#     rm /tmp/afni_minimal.tar.gz && \
+#     export PATH=/opt/afni:$PATH && \
+#     export DYLD_FALLBACK_LIBRARY_PATH=/opt/afni && \
+#     echo '# Path to AFNI' >> ~/cpac_env.sh && \
+#     echo 'export PATH=/opt/afni:$PATH' >> ~/cpac_env.sh && \
+#     echo 'export DYLD_FALLBACK_LIBRARY_PATH=/opt/afni' >> ~/cpac_env.sh
 
 
 COPY cpac_install.sh /tmp/cpac_install.sh
