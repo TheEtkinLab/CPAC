@@ -2,6 +2,21 @@ Bootstrap: docker
 From: fcpindi/c-pac
 IncludeCmd: yes
 
+%help
+You are in the C-PAC container. To see help run
+singularity run TheEtkinLab-CPAC.sif -h
+
+%runscript
+    echo "Running C-PAC!"
+    echo "Arguments received: $*"
+    exec /code/run.py "$@"
+
+%labels
+Author mnarayan@users.noreply.github.com
+Build-date 05/05/2019
+Vendor Ubuntu
+Version x.x.x
+
 %environment
 FREESURFER_HOME=
 
